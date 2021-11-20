@@ -3,14 +3,13 @@ rm(list=ls())
 
 library(R.matlab)
 
-path  <- "~/dropbox/Working/cael_climate/" # Directory where output is stored.
-files <- list.files(path=path, pattern="equals1")
+files <- list.files(pattern="equals1")
 
 #GLB: original temperature timee series started at 1 not 0
-ds_ssp370      <- data.frame(readMat(paste(path,files[1],sep=''))$SSP370)
+ds_ssp370      <- data.frame(readMat(files[1])$SSP370)
 ds_ssp370$year <- 2020:(2020+287)
 ds_ssp370$rcp  <- "SSP370"
-ds_ssp460      <- data.frame(readMat(paste(path,files[2],sep=''))$SSP460)
+ds_ssp460      <- data.frame(readMat(files[2])$SSP460)
 ds_ssp460$year <- 2020:(2020+287)
 ds_ssp460$rcp  <- "SSP460"
 
@@ -72,7 +71,7 @@ UofC   <- sum((((gdp.ts[,1])^(1-eta[s]))/(1-eta[s]))*pop.ts[,1]*df.2[,1]) # NPV 
 dam_370 <- (UofC - x[2:nrow(x),grep("SSP370",colnames(x))])/scalar
 dam_460 <- (UofC - x[2:nrow(x),grep("SSP460",colnames(x))])/scalar
 
-pdf('~/dropbox/working/cael_climate/damage_distributions_11_19_2021.pdf',height=4.5,width=5)
+pdf('damage_distributions_11_19_2021.pdf',height=4.5,width=5)
 par(mfrow=c(1,1))
 hist(dam_370/1E12,breaks=500,xlim=c(0,400),ylim=c(0,0.018),col=rgb(1,0,0,0.5),xlab='',ylab='',main='',freq=FALSE)
 hist(dam_460/1E12,breaks=500,add=TRUE,col=rgb(0,0,1,0.5),freq=FALSE)
@@ -81,6 +80,6 @@ hist(dam_460/1E12,breaks=500,add=TRUE,col=rgb(0,0,1,0.5),freq=FALSE)
   mtext(side=2,'Density',line=2.5)
 dev.off()  
 
-write.csv(file='~/dropbox/working/cael_climate/damages_11_19_2021.csv',data.frame(SSP370=dam_370,SSP460=dam_460),row.names=FALSE)
+write.csv(file='damages_11_19_2021.csv',data.frame(SSP370=dam_370,SSP460=dam_460),row.names=FALSE)
 
 
