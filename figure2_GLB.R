@@ -45,6 +45,9 @@ gdp.ts <- gdp*(1+g)^seq(0,n-1,1)
 gdp.ts <- matrix(rep(gdp.ts,nn+1),ncol=nn+1,nrow=n)
 gdp.ts <- (gdp.ts/pop.ts)/1000 # undisturbed consumption per capita expressed in thousands of dollars.
 
+######################################################
+## DISCOUNT RATE #####################################
+######################################################
 # Discount factors
 df.2 <- 1/((1+rho[s])^seq(0,n-1,1))
 df.2 <- matrix(rep(df.2,nn+1),ncol=nn+1,nrow=n)
@@ -54,6 +57,9 @@ for (j in c("SSP370","SSP460")) {
   t <- d[d$rcp==j,]
   t <- t[,!(names(t) %in% c("year","rcp","r","g","b"))]
   
+  ############################################################################
+  ## GLB: DAMAGE FUNCTION CALCULATION FROM Weitzman ##########################
+  ############################################################################
   # Isoelastic utility
   x.Weitzman <- colSums((((gdp.ts*(1/(1+((t)/20.46)^2 + ((t)/6.081)^6)))^(1-eta[s]))/(1-eta[s])) * df.2 * pop.ts)
   x <- rbind(x, x.Weitzman)
@@ -65,8 +71,6 @@ colnames(x) <- files
 UofC   <- ((gdp.ts[1,1])^(1-eta[s]))/(1-eta[s]) # Utility of undisturbed per capita consumption today (in thousands of dollars)
 scalar <- UofC-(((gdp.ts[1,1]-0.001)^(1-eta[s]))/(1-eta[s])) # Utility value of the marginal dollar
 UofC   <- sum((((gdp.ts[,1])^(1-eta[s]))/(1-eta[s]))*pop.ts[,1]*df.2[,1]) # NPV of utility of undisturbed aggregate consumption
-
-
 
 dam_370 <- (UofC - x[2:nrow(x),grep("SSP370",colnames(x))])/scalar
 dam_460 <- (UofC - x[2:nrow(x),grep("SSP460",colnames(x))])/scalar
