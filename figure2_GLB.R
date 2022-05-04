@@ -46,7 +46,7 @@ gdp.ts <- matrix(rep(gdp.ts,nn+1),ncol=nn+1,nrow=n)
 gdp.ts <- (gdp.ts/pop.ts)/1000 # undisturbed consumption per capita expressed in thousands of dollars.
 
 ######################################################
-## DISCOUNT RATE #####################################
+## GLB: DISCOUNT RATE ################################
 ######################################################
 # Discount factors
 df.2 <- 1/((1+rho[s])^seq(0,n-1,1))
